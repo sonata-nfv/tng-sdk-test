@@ -46,12 +46,12 @@ class Vnv(DockerBasedVIM):
         if not os.path.isfile(package):
             raise Exception('Package {} not found'.format(package))
 
-        package_data = parse_package(package_format)
+        package_data = parse_package(package, package_format)
 
         instances = []
         for name, vdus in package_data['endpoints'].items():
-            if len(vdus) != 1:
-                raise Exception('Only one deployment unit per NF is supported.')
+            # if len(vdus) != 1:
+            #     raise Exception('Only one deployment unit per NF is supported.')
             instances.append(self._add_instance(name))
 
         return instances
@@ -70,7 +70,21 @@ class VnvInstance(DockerBasedInstance):
     A representation of an instance on the V&V platform.
     Should not be created manually but by the Vnv class.
     """
-    pass
+    def get_ip(self, interface):
+        """
+        Get an IP address of an interface.
+
+        Args:
+            interface (str): The name of the interface
+
+        Returns:
+            (str) or (None): The IP address of the interface or None if the interface doesn't exist
+                             or if the interface has no IP address
+        """
+
+#        env_name = '{}_{}'.format(self.name, interface)
+        print("GOT HERE")
+        return os.environ.get(self.name, None)
 
 
 class VnvImmutableInstance(BaseImmutableInstance):
@@ -90,5 +104,6 @@ class VnvImmutableInstance(BaseImmutableInstance):
                              or if the interface has no IP address
         """
 
-        env_name = '{}_{}'.format(self.name, interface)
-        return os.environ.get(env_name, None)
+#        env_name = '{}_{}'.format(self.name, interface)
+        print("GOT HERE")
+        return os.environ.get(self.name, None)

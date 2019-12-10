@@ -118,11 +118,12 @@ def test_add_link(vim, add_link, expected_exec_code):
 @pytest.mark.parametrize('test_vnf', [
     'sniffer', 'generator'
 ])
-@pytest.mark.skip(reason="TODO")
+@pytest.mark.skip(reason="pass")
 def test_add_test_vnf(vim, test_vnf):
     pass
 
 
+@pytest.mark.skip(reason="pass")
 def test_get_traffic(vim):
     image = 'ubuntu:trusty'
     interface = 'emu0'
