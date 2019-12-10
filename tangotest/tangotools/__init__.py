@@ -103,10 +103,12 @@ def build_probe(tests_path, probe_name=None):
         python-pip \
         git \
         libltdl-dev
-    RUN pip install git+https://github.com/sonata-nfv/tng-sdk-test
+    RUN pip install git+https://github.com/tsoenen/tng-sdk-test
     COPY . /
+    RUN pip install pytest==4.6.4
+    RUN pip install -r requirements.txt
     ENV TANGOTEST_PLATFORM VNV
-    CMD /bin/bash
+    CMD python -m pytest -vvv test_ns1.py
     """
 
     dockerfile = tempfile.NamedTemporaryFile(bufsize=0)
@@ -213,6 +215,7 @@ def generate_test_descriptor(probe_name, package_data):
         'description': 'Functional test for {}'.format(package_data['ns_name']),
         'testing_tags': package_data.get('testing_tags', []),
         'test_category': ['functional'],
+        'service_platforms': ["SONATA"],
         'phases': [{
             'id': 'setup',
             'steps': [{
@@ -226,16 +229,16 @@ def generate_test_descriptor(probe_name, package_data):
                 'probes': [{
                     'id': 'tester',
                     'name': 'tester',
-                    'image': 'registry.sonata-nfv.eu:5000/{}'.format(probe_name),
+                    'image': 'tsoenen/{}'.format(probe_name),
                     'description': 'A container with tng-sdk-test and the test code',
                     'parameters': [{
-                        'key': '{}_{}'.format(vnf, interface),
-                        'value': '$({}/endpoints/name:{}/address)'.format(vnf, interface)
-                    } for vnf in package_data['endpoints'] for interface in package_data['endpoints'][vnf]],
+                        'key': '{}'.format(vnf),
+                        'value': '$({}/endpoints/id:floating_ip/address)'.format(vnf)
+                    } for vnf in package_data['endpoints']],
                 }],
             }],
         }, {
-            'id': 'excercise',
+            'id': 'exercise',
             'steps': [{
                 'name': 'run_tests',
                 'description': 'Run a probe with tng-sdk-test and the test code',
