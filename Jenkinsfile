@@ -9,12 +9,6 @@ pipeline {
                 sh "pipeline/build.sh"
             }
         }
-        stage('Style check') {
-            steps {
-                echo 'Stage: Style check...'
-                sh "pipeline/checkstyle.sh"
-            }
-        }
         stage('Testing') {
             steps {
                 echo 'Stage: Testing...'
@@ -27,17 +21,17 @@ pipeline {
                 sh "pipeline/publish.sh"
             }
         }
-        stage('Promoting release v5.0') {
+        stage('Promoting release v5.1') {
             when {
-                branch 'v5.0'
+                branch 'v5.1'
             }
             stages {
                 stage('Generating release') {
                     steps {
-                        sh 'docker tag registry.sonata-nfv.eu:5000/tng-sdk-test:latest registry.sonata-nfv.eu:5000/tng-sdk-test:v5.0'
-                        sh 'docker tag registry.sonata-nfv.eu:5000/tng-sdk-test:latest sonatanfv/tng-sdk-test:v5.0'
-                        sh 'docker push registry.sonata-nfv.eu:5000/tng-sdk-test:v5.0'
-                        sh 'docker push sonatanfv/tng-sdk-test:v5.0'
+                        sh 'docker tag registry.sonata-nfv.eu:5000/tng-sdk-test:latest registry.sonata-nfv.eu:5000/tng-sdk-test:v5.1'
+                        sh 'docker tag registry.sonata-nfv.eu:5000/tng-sdk-test:latest sonatanfv/tng-sdk-test:v5.1'
+                        sh 'docker push registry.sonata-nfv.eu:5000/tng-sdk-test:v5.1'
+                        sh 'docker push sonatanfv/tng-sdk-test:v5.1'
                     }
                 }
             }

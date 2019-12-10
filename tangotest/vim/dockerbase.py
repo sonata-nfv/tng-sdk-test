@@ -143,13 +143,13 @@ class DockerBasedInstance(BaseInstance):
         self.vim = vim
         self.name = name
         self.output = None
-        self.container = None
         # Don't stop here in vnv case, just ignore
         try:
             self.docker_client = self.vim.docker_client
             self.container = self.docker_client.containers.get(self.container_name)
         except:
-            pass
+            self.docker_client = None
+            self.container = None
 
     @property
     def container_name(self):
