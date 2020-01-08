@@ -9,12 +9,6 @@ pipeline {
                 sh "pipeline/build.sh"
             }
         }
-        stage('Style check') {
-            steps {
-                echo 'Stage: Style check...'
-                sh "pipeline/checkstyle.sh"
-            }
-        }
         stage('Testing') {
             steps {
                 echo 'Stage: Testing...'
